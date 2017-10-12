@@ -1,0 +1,27 @@
+version: "2"
+services:
+  mongo1:
+    image: mongo:3.2
+    ports:
+      - "27017:27017"
+    volumes:
+      - ./data/db1:/data/db
+    command: mongod --master
+  mongo2:
+    image: mongo:3.2
+    ports:
+      - "27018:27017"
+    volumes:
+      - ./data/db2:/data/db
+    command: mongod --slave --source mongo1:27017
+    depends_on:
+      - mongo1
+  mongo3:
+    image: mongo:3.2
+    ports:
+      - "27019:27017"
+    volumes:
+      - ./data/db3:/data/db
+    command: mongod --slave --source mongo1:27017
+    depends_on:
+      - mongo1
